@@ -12,7 +12,7 @@ interface Ctx {
   years: number[];
   importRows: (rows: DataRow[], source: string) => void;
   reset: () => void;
-  bdl: { loading: boolean; warnings: string[]; fetchedAt?: string; reload: () => void };
+  bdl: { loading: boolean; warnings: string[]; fetchedAt: string | undefined; reload: () => void };
 }
 
 const DataCtx = createContext<Ctx | null>(null);
