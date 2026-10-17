@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { DataProvider } from "../lib/store";
 import { SiteHeader } from "../components/SiteHeader";
+import { ChatBot } from "../components/ChatBot";
 
 function NotFoundComponent() {
   return (
@@ -122,6 +123,7 @@ function RootComponent() {
         <main className="min-h-screen">
           <Outlet />
         </main>
+        <ChatBot />
         <footer className="border-t py-6 text-center text-xs text-muted-foreground">
           Płock w liczbach · prototyp hackathonowy
         </footer>
