@@ -1,0 +1,4 @@
+[{"capability":"code","source":"archive","outcome":"migrate","status":"done","next_action":null},
+{"capability":"database/records/auth","source":"none used (unused generated client only)","outcome":"not applicable","status":"verified","next_action":null},
+{"capability":"GUS BDL public API","source":"bdl.stat.gov.pl","outcome":"preserve","status":"pending-verify","next_action":"optional BDL_CLIENT_ID for higher rate limits"},
+{"capability":"sample JSON/ODS data","source":"public/data","outcome":"migrate","status":"done","next_action":null}]
