@@ -41,7 +41,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     });
     setSource(src);
   }, []);
-  const appliedBdlAt = useRef<string | undefined>();
+  const appliedBdlAt = useRef<string | undefined>(undefined);
   const reset = useCallback(() => {
     setRows(SAMPLE);
     setSource("Dane przykładowe (wbudowane)");
