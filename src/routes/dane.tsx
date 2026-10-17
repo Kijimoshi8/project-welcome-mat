@@ -19,7 +19,7 @@ export const Route = createFileRoute("/dane")({
 const FILES = ["przyklad.ods", "przyklad.json"];
 
 function DataPage() {
-  const { importRows, reset, rows, source } = useData();
+  const { importRows, reset, rows, source, bdl } = useData();
   const [msg, setMsg] = useState<string>();
 
   const handle = async (buf: ArrayBuffer, name: string) => {
@@ -39,6 +39,14 @@ function DataPage() {
       <p className="mt-2 text-muted-foreground">Aktualne źródło: <b className="text-foreground">{source}</b> · {rows.length.toLocaleString("pl-PL")} wierszy</p>
 
       <section className="mt-6 rounded-2xl border bg-card p-5">
+        <h2 className="font-display text-lg font-bold">API BDL — Główny Urząd Statystyczny</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Oficjalne dane (ludność, wynagrodzenia, bezrobocie, lata 2015–2024) pobierane automatycznie z api.stat.gov.pl. Pozostałe wskaźniki to dane przykładowe.</p>
+        <p className="mt-2 text-sm">{bdl.loading ? "Pobieranie danych z GUS…" : bdl.fetchedAt ? `Pobrano: ${new Date(bdl.fetchedAt).toLocaleString("pl-PL")}` : "Brak danych z GUS."}</p>
+        {bdl.warnings.map((w) => <p key={w} className="mt-1 text-sm text-destructive">{w}</p>)}
+        <button className="mt-3 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground" disabled={bdl.loading} onClick={bdl.reload}>Odśwież dane z GUS BDL</button>
+      </section>
+
+      <section className="mt-6 rounded-2xl border bg-card p-5">
         <h2 className="font-display text-lg font-bold">Pliki z katalogu public/data/</h2>
         <div className="mt-3 flex flex-wrap gap-3">
           {FILES.map((f) => (
@@ -49,8 +57,8 @@ function DataPage() {
       </section>
 
       <section className="mt-6 rounded-2xl border bg-card p-5">
-        <h2 className="font-display text-lg font-bold">Własny plik (.ods, .xlsx, .json)</h2>
-        <input type="file" accept=".ods,.xlsx,.xls,.json" className="mt-3 block text-sm" onChange={async (e) => { const f = e.target.files?.[0]; if (f) handle(await f.arrayBuffer(), f.name); }} />
+        <h2 className="font-display text-lg font-bold">Własny plik (.ods, .csv, .xlsx, .json)</h2>
+        <input type="file" accept=".ods,.csv,.xlsx,.xls,.json" className="mt-3 block text-sm" onChange={async (e) => { const f = e.target.files?.[0]; if (f) handle(await f.arrayBuffer(), f.name); }} />
         {msg && <p className="mt-4 rounded-md bg-secondary p-3 text-sm">{msg}</p>}
       </section>
 
