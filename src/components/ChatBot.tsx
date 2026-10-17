@@ -38,12 +38,12 @@ const KEYWORDS: [string, string][] = [
 ];
 
 interface Parsed {
-  indicator?: string;
-  category?: CategoryId;
+  indicator?: string | undefined;
+  category?: CategoryId | undefined;
   regions: string[];
-  from?: number;
-  to?: number;
-  chart?: "bar" | "line";
+  from?: number | undefined;
+  to?: number | undefined;
+  chart?: "bar" | "line" | undefined;
 }
 
 function parseCommand(input: string): Parsed {
