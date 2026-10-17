@@ -123,7 +123,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <footer className="border-t py-6 text-center text-xs text-muted-foreground">
-          Płock w liczbach · prototyp hackathonowy · dane przykładowe, wygenerowane syntetycznie
+          Płock w liczbach · prototyp hackathonowy
         </footer>
       </DataProvider>
     </QueryClientProvider>

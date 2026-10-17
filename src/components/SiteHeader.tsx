@@ -47,7 +47,7 @@ export function SiteHeader() {
         </div>
       </div>
       <div className="bg-accent/15 py-1 text-center text-xs font-medium text-foreground">
-        Prototyp demonstracyjny · wszystkie liczby to DANE PRZYKŁADOWE, nie oficjalne statystyki
+        Prototyp demonstracyjny
       </div>
     </header>
   );
