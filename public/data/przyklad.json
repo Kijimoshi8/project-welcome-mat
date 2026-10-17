@@ -1,0 +1,74 @@
+[
+ {
+  "region": "plock",
+  "wskaznik": "rowery",
+  "rok": 2023,
+  "wartosc": 110
+ },
+ {
+  "region": "plock",
+  "wskaznik": "bezrobocie",
+  "rok": 2023,
+  "wartosc": 15
+ },
+ {
+  "region": "plock",
+  "wskaznik": "rowery",
+  "rok": 2024,
+  "wartosc": 125
+ },
+ {
+  "region": "plock",
+  "wskaznik": "bezrobocie",
+  "rok": 2024,
+  "wartosc": 14.6
+ },
+ {
+  "region": "gostynin",
+  "wskaznik": "rowery",
+  "rok": 2023,
+  "wartosc": 130
+ },
+ {
+  "region": "gostynin",
+  "wskaznik": "bezrobocie",
+  "rok": 2023,
+  "wartosc": 14.5
+ },
+ {
+  "region": "gostynin",
+  "wskaznik": "rowery",
+  "rok": 2024,
+  "wartosc": 145
+ },
+ {
+  "region": "gostynin",
+  "wskaznik": "bezrobocie",
+  "rok": 2024,
+  "wartosc": 14.1
+ },
+ {
+  "region": "sierpc",
+  "wskaznik": "rowery",
+  "rok": 2023,
+  "wartosc": 150
+ },
+ {
+  "region": "sierpc",
+  "wskaznik": "bezrobocie",
+  "rok": 2023,
+  "wartosc": 14
+ },
+ {
+  "region": "sierpc",
+  "wskaznik": "rowery",
+  "rok": 2024,
+  "wartosc": 165
+ },
+ {
+  "region": "sierpc",
+  "wskaznik": "bezrobocie",
+  "rok": 2024,
+  "wartosc": 13.6
+ }
+]
