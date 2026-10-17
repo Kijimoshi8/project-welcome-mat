@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { bdlQueryOptions } from "./bdl-query";
 export { parseFile } from "./import-data";
@@ -41,14 +41,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
     });
     setSource(src);
   }, []);
+  const bdlQuery = useQuery(bdlQueryOptions);
+  const bdlRows = bdlQuery.data?.rows;
+  const applyBdl = useCallback(() => {
+    if (bdlRows?.length) importRows(bdlRows, "GUS BDL (api.stat.gov.pl) + dane przykładowe dla brakujących wskaźników");
+  }, [bdlRows, importRows]);
+  useEffect(() => { applyBdl(); }, [applyBdl]);
   const reset = useCallback(() => {
     setRows(SAMPLE);
     setSource("Dane przykładowe (wbudowane)");
-  }, []);
-  const bdlQuery = useQuery(bdlQueryOptions);
-  useEffect(() => {
-    if (bdlQuery.data?.rows.length) importRows(bdlQuery.data.rows, "GUS BDL (api.stat.gov.pl) + dane przykładowe dla brakujących wskaźników");
-  }, [bdlQuery.data]); // eslint-disable-line react-hooks/exhaustive-deps
+    // po przywróceniu danych wbudowanych ponownie nałóż aktualne dane z GUS
+    setTimeout(applyBdl, 0);
+  }, [applyBdl]);
   return <DataCtx.Provider value={{ rows, source, get, series, years, importRows, reset, bdl: { loading: bdlQuery.isFetching, warnings: bdlQuery.data?.warnings ?? (bdlQuery.error ? ["Nie udało się połączyć z API BDL."] : []), fetchedAt: bdlQuery.data?.fetchedAt, reload: () => { void bdlQuery.refetch(); } } }}>{children}</DataCtx.Provider>;
 }
 
