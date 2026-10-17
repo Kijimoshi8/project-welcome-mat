@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { DataProvider } from "../lib/store";
 import { SiteHeader } from "../components/SiteHeader";
+import { ChatBot } from "../components/ChatBot";
 
 function NotFoundComponent() {
   return (
