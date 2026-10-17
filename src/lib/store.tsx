@@ -1,4 +1,7 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { bdlQueryOptions } from "./bdl-query";
+export { parseFile } from "./import-data";
 import { generateSampleData, INDICATORS, REGIONS, type DataRow } from "./data";
 
 interface Ctx {
@@ -9,6 +12,7 @@ interface Ctx {
   years: number[];
   importRows: (rows: DataRow[], source: string) => void;
   reset: () => void;
+  bdl: { loading: boolean; warnings: string[]; fetchedAt: string | undefined; reload: () => void };
 }
 
 const DataCtx = createContext<Ctx | null>(null);
@@ -41,7 +45,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setRows(SAMPLE);
     setSource("Dane przykładowe (wbudowane)");
   }, []);
-  return <DataCtx.Provider value={{ rows, source, get, series, years, importRows, reset }}>{children}</DataCtx.Provider>;
+  const bdlQuery = useQuery(bdlQueryOptions);
+  useEffect(() => {
+    if (bdlQuery.data?.rows.length) importRows(bdlQuery.data.rows, "GUS BDL (api.stat.gov.pl) + dane przykładowe dla brakujących wskaźników");
+  }, [bdlQuery.data]); // eslint-disable-line react-hooks/exhaustive-deps
+  return <DataCtx.Provider value={{ rows, source, get, series, years, importRows, reset, bdl: { loading: bdlQuery.isFetching, warnings: bdlQuery.data?.warnings ?? (bdlQuery.error ? ["Nie udało się połączyć z API BDL."] : []), fetchedAt: bdlQuery.data?.fetchedAt, reload: () => { void bdlQuery.refetch(); } } }}>{children}</DataCtx.Provider>;
 }
 
 export function useData() {
@@ -50,43 +58,3 @@ export function useData() {
   return c;
 }
 
-const norm = (s: unknown) =>
-  String(s ?? "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ł/g, "l")
-    .trim();
-
-function resolve<T extends { id: string; name: string }>(list: T[], v: unknown) {
-  const n = norm(v);
-  return list.find((x) => norm(x.id) === n || norm(x.name) === n)?.id;
-}
-
-/** Zamienia rekordy (z JSON lub arkusza) na wiersze danych. Kolumny: region, wskaznik, rok, wartosc. */
-export function parseRecords(records: Record<string, unknown>[]): { rows: DataRow[]; skipped: number } {
-  const rows: DataRow[] = [];
-  let skipped = 0;
-  for (const rec of records) {
-    const k = Object.fromEntries(Object.entries(rec).map(([a, b]) => [norm(a), b]));
-    const region = resolve(REGIONS, k["region"]);
-    const indicator = resolve(INDICATORS, k["wskaznik"] ?? k["indicator"]);
-    const year = Number(k["rok"] ?? k["year"]);
-    const value = Number(String(k["wartosc"] ?? k["value"] ?? "").replace(",", "."));
-    if (region && indicator && Number.isFinite(year) && Number.isFinite(value)) rows.push({ region, indicator, year, value });
-    else skipped++;
-  }
-  return { rows, skipped };
-}
-
-export async function parseFile(buf: ArrayBuffer, name: string) {
-  if (name.toLowerCase().endsWith(".json")) {
-    const json = JSON.parse(new TextDecoder().decode(buf));
-    return parseRecords(Array.isArray(json) ? json : json.dane ?? json.rows ?? []);
-  }
-  const XLSX = await import("xlsx");
-  const wb = XLSX.read(buf, { type: "array" });
-  const all: Record<string, unknown>[] = [];
-  wb.SheetNames.forEach((s) => all.push(...XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[s]!)));
-  return parseRecords(all);
-}
