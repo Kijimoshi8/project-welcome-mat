@@ -123,6 +123,7 @@ function RootComponent() {
         <main className="min-h-screen">
           <Outlet />
         </main>
+        <ChatBot />
         <footer className="border-t py-6 text-center text-xs text-muted-foreground">
           Płock w liczbach · prototyp hackathonowy
         </footer>
