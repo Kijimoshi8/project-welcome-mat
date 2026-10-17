@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DaneRouteImport } from './routes/dane'
+import { Route as DlaFirmRouteImport } from './routes/dla-firm'
+import { Route as EksploratorRouteImport } from './routes/eksplorator'
+import { Route as PorownanieRouteImport } from './routes/porownanie'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DaneRoute = DaneRouteImport.update({
+  id: '/dane',
+  path: '/dane',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DlaFirmRoute = DlaFirmRouteImport.update({
+  id: '/dla-firm',
+  path: '/dla-firm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EksploratorRoute = EksploratorRouteImport.update({
+  id: '/eksplorator',
+  path: '/eksplorator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PorownanieRoute = PorownanieRouteImport.update({
+  id: '/porownanie',
+  path: '/porownanie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dane': typeof DaneRoute
+  '/dla-firm': typeof DlaFirmRoute
+  '/eksplorator': typeof EksploratorRoute
+  '/porownanie': typeof PorownanieRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dane': typeof DaneRoute
+  '/dla-firm': typeof DlaFirmRoute
+  '/eksplorator': typeof EksploratorRoute
+  '/porownanie': typeof PorownanieRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dane': typeof DaneRoute
+  '/dla-firm': typeof DlaFirmRoute
+  '/eksplorator': typeof EksploratorRoute
+  '/porownanie': typeof PorownanieRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/dane' | '/dla-firm' | '/eksplorator' | '/porownanie'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/dane' | '/dla-firm' | '/eksplorator' | '/porownanie'
+  id: '__root__' | '/' | '/dane' | '/dla-firm' | '/eksplorator' | '/porownanie'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DaneRoute: typeof DaneRoute
+  DlaFirmRoute: typeof DlaFirmRoute
+  EksploratorRoute: typeof EksploratorRoute
+  PorownanieRoute: typeof PorownanieRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dane': {
+      id: '/dane'
+      path: '/dane'
+      fullPath: '/dane'
+      preLoaderRoute: typeof DaneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dla-firm': {
+      id: '/dla-firm'
+      path: '/dla-firm'
+      fullPath: '/dla-firm'
+      preLoaderRoute: typeof DlaFirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eksplorator': {
+      id: '/eksplorator'
+      path: '/eksplorator'
+      fullPath: '/eksplorator'
+      preLoaderRoute: typeof EksploratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/porownanie': {
+      id: '/porownanie'
+      path: '/porownanie'
+      fullPath: '/porownanie'
+      preLoaderRoute: typeof PorownanieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DaneRoute: DaneRoute,
+  DlaFirmRoute: DlaFirmRoute,
+  EksploratorRoute: EksploratorRoute,
+  PorownanieRoute: PorownanieRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
