@@ -111,7 +111,7 @@ function Explorer() {
                 <YAxis tickFormatter={(v) => fmt(v)} width={64} domain={["auto", "auto"]} />
                 <Tooltip formatter={(v, n) => [fmt(Number(v)), name(String(n))]} />
                 <Legend formatter={(v) => name(String(v))} />
-                {regions.map((r, i) => <Line key={r} dataKey={r} stroke={COLORS[i % 5]} strokeWidth={3} dot={{ r: 3 }} />)}
+                {regions.map((r, i) => <Line key={r} dataKey={r} stroke={COLORS[i % 5] ?? "var(--chart-1)"} strokeWidth={3} dot={{ r: 3 }} />)}
               </LineChart>
             </ResponsiveContainer>}
           </div>
