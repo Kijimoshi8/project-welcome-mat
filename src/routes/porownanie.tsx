@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CATEGORIES, INDICATORS, REGIONS, fmt, fmtPct, pct } from "@/lib/data";
 import { useData } from "@/lib/store";
 import { downloadCsv } from "@/lib/csv";
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/porownanie")({
       { name: "description", content: "Porównaj dwa regiony: różnice liczbowe i procentowe dla wszystkich wskaźników." },
       { property: "og:title", content: "Porównanie regionów — Płock w liczbach" },
       { property: "og:description", content: "Różnice liczbowe i procentowe między regionami." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Compare,
@@ -27,14 +29,14 @@ function Compare() {
   const [y2, setY2] = useState(years[years.length - 1] ?? 2024);
   const [cat, setCat] = useState<string>("all");
   const [focus, setFocus] = useState("wynagrodzenie");
-  const na = REGIONS.find((r) => r.id === a)!.name, nb = REGIONS.find((r) => r.id === b)!.name;
+  const na = REGIONS.find((r) => r.id === a)?.name ?? a, nb = REGIONS.find((r) => r.id === b)?.name ?? b;
 
   const rows = INDICATORS.filter((i) => cat === "all" || i.category === cat).map((i) => {
     const a1 = get(a, i.id, y1), a2 = get(a, i.id, y2), b1 = get(b, i.id, y1), b2 = get(b, i.id, y2);
     const pa = pct(a1, a2), pb = pct(b1, b2);
     return { i, a2, b2, diff: a2 !== undefined && b2 !== undefined ? a2 - b2 : undefined, diffPct: pct(b2, a2), pa, pb };
   });
-  const fi = INDICATORS.find((i) => i.id === focus)!;
+  const fi = INDICATORS.find((i) => i.id === focus);
   const focusData = [y1, y2].map((y) => ({ rok: String(y), [na]: get(a, focus, y), [nb]: get(b, focus, y) }));
   const dynData = rows.map((r) => ({ name: r.i.name, [na]: r.pa !== undefined ? Number(r.pa.toFixed(2)) : 0, [nb]: r.pb !== undefined ? Number(r.pb.toFixed(2)) : 0 }));
 
@@ -76,7 +78,7 @@ function Compare() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="rok" />
                 <YAxis tickFormatter={(v) => fmt(v)} width={64} />
-                <Tooltip formatter={(v) => `${fmt(Number(v))} ${fi.unit}`} />
+                <Tooltip formatter={(v) => `${fmt(Number(v))} ${fi?.unit ?? ""}`} />
                 <Legend />
                 <Bar dataKey={na} fill="var(--chart-1)" radius={[6, 6, 0, 0]} />
                 <Bar dataKey={nb} fill="var(--chart-2)" radius={[6, 6, 0, 0]} />
@@ -86,18 +88,27 @@ function Compare() {
         </section>
         <section className="rounded-2xl border bg-card p-5">
           <h2 className="font-display text-lg font-bold">Dynamika zmian {y1} → {y2} (%)</h2>
-          <div className="mt-4 h-80">
-            <ResponsiveContainer>
-              <BarChart data={dynData} layout="vertical" margin={{ left: 20 }}>
+          <div className="mt-3 flex flex-wrap justify-center gap-4 text-sm">
+            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-1)]" />{na}</span>
+            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-2)]" />{nb}</span>
+          </div>
+          <div className="mt-4 max-h-[640px] overflow-auto rounded-md border" tabIndex={0} aria-label="Dynamika zmian według wskaźników">
+            <div className="min-w-[520px]">
+            <ResponsiveContainer width="100%" height={Math.max(320, rows.length * 54 + 64)}>
+              <BarChart data={dynData} layout="vertical" margin={{ left: 8, right: 72, top: 16, bottom: 16 }} barSize={16}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis type="number" unit="%" />
-                <YAxis type="category" dataKey="name" width={170} fontSize={11} />
+                <YAxis type="category" dataKey="name" width={170} fontSize={11} interval={0} />
                 <Tooltip formatter={(v) => fmtPct(Number(v))} />
-                <Legend />
-                <Bar dataKey={na} fill="var(--chart-1)" />
-                <Bar dataKey={nb} fill="var(--chart-2)" />
+                <Bar dataKey={na} fill="var(--chart-1)">
+                  <LabelList dataKey={na} position="right" offset={6} fill="var(--foreground)" fontSize={11} formatter={(value) => fmtPct(Number(value))} />
+                </Bar>
+                <Bar dataKey={nb} fill="var(--chart-2)">
+                  <LabelList dataKey={nb} position="right" offset={6} fill="var(--foreground)" fontSize={11} formatter={(value) => fmtPct(Number(value))} />
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </section>
       </div>
