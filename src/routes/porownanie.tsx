@@ -87,13 +87,14 @@ function Compare() {
           </div>
         </section>
         <section className="rounded-2xl border bg-card p-5">
-          <h2 className="font-display text-lg font-bold">Dynamika zmian {y1} → {y2} (%)</h2>
-          <div className="mt-3 flex flex-wrap justify-center gap-4 text-sm">
-            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-1)]" />{na}</span>
-            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-2)]" />{nb}</span>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-display text-lg font-bold">Dynamika zmian {y1} → {y2} (%)</h2>
+            <div className="flex gap-4 text-sm">
+              <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-1)]" />{na}</span>
+              <span className="inline-flex items-center gap-2"><span className="h-3 w-3 bg-[var(--chart-2)]" />{nb}</span>
+            </div>
           </div>
-          <div className="mt-4 max-h-[640px] overflow-auto rounded-md border" tabIndex={0} aria-label="Dynamika zmian według wskaźników">
-            <div className="min-w-[520px]">
+          <div className="mt-4 h-80 overflow-y-auto overflow-x-hidden rounded-md border" tabIndex={0} aria-label="Dynamika zmian według wskaźników">
             <ResponsiveContainer width="100%" height={Math.max(320, rows.length * 54 + 64)}>
               <BarChart data={dynData} layout="vertical" margin={{ left: 8, right: 72, top: 16, bottom: 16 }} barSize={16}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -104,7 +105,6 @@ function Compare() {
                 <Bar dataKey={nb} fill="var(--chart-2)" />
               </BarChart>
             </ResponsiveContainer>
-            </div>
           </div>
         </section>
       </div>
