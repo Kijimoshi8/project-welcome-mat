@@ -32,6 +32,16 @@ function Home() {
         </div>
       </section>
 
+      <h2 className="mt-12 font-display text-2xl font-bold">Kategorie</h2>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {CATEGORIES.map((c) => (
+          <Link key={c.id} to="/eksplorator" search={{ kategoria: c.id }} className="rounded-xl border bg-card p-4 text-center font-semibold hover:bg-secondary">
+            {c.name}
+            <span className="block text-xs font-normal text-muted-foreground">{INDICATORS.filter((i) => i.category === c.id).length} wskaźniki</span>
+          </Link>
+        ))}
+      </div>
+
       <h2 className="mt-12 font-display text-2xl font-bold">Płock: kluczowe wskaźniki {first}–{last}</h2>
       <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {KEY.map((id) => {
@@ -54,16 +64,6 @@ function Home() {
             </Link>
           );
         })}
-      </div>
-
-      <h2 className="mt-12 font-display text-2xl font-bold">Kategorie</h2>
-      <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {CATEGORIES.map((c) => (
-          <Link key={c.id} to="/eksplorator" search={{ kategoria: c.id }} className="rounded-xl border bg-card p-4 text-center font-semibold hover:bg-secondary">
-            {c.name}
-            <span className="block text-xs font-normal text-muted-foreground">{INDICATORS.filter((i) => i.category === c.id).length} wskaźniki</span>
-          </Link>
-        ))}
       </div>
 
       <section className="mt-12 rounded-2xl border bg-card p-6">
