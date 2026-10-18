@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { RegionMap } from "@/components/RegionMap";
+import { Button } from "@/components/ui/button";
+import { selectedRegions, toggleRegion } from "@/lib/region-selection";
 import { CATEGORIES, INDICATORS, REGIONS, fmt, fmtPct, pct, type CategoryId } from "@/lib/data";
 import { useData } from "@/lib/store";
 import { downloadCsv } from "@/lib/csv";
@@ -21,6 +23,8 @@ export const Route = createFileRoute("/eksplorator")({
       { name: "description", content: "Mapa, filtry i wykresy wskaźników Płocka i okolic." },
       { property: "og:title", content: "Eksplorator danych — Płock w liczbach" },
       { property: "og:description", content: "Interaktywna mapa i wykresy wskaźników regionu." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Explorer,
@@ -37,13 +41,13 @@ function Explorer() {
 
   const cat = s.kategoria ?? INDICATORS.find((i) => i.id === s.wskaznik)?.category ?? "demografia";
   const list = INDICATORS.filter((i) => i.category === cat);
-  const ind = list.find((i) => i.id === s.wskaznik) ?? list[0] ?? INDICATORS[0]!;
-  const regions = s.regiony ? s.regiony.split(",").filter((r) => REGIONS.some((x) => x.id === r)) : ["plock", "gostynin", "sierpc"];
+  const ind = list.find((i) => i.id === s.wskaznik) ?? list[0] ?? INDICATORS[0];
+  if (!ind) throw new Error("Brak wskaźników");
+  const regions = selectedRegions(s.regiony);
   const y1 = s.od ?? years[0] ?? 2015, y2 = s.do ?? years[years.length - 1] ?? 2024;
 
   const toggle = (id: string) => {
-    const next = regions.includes(id) ? regions.filter((r) => r !== id) : [...regions, id].slice(-5);
-    set({ regiony: next.join(",") || undefined });
+    set({ regiony: toggleRegion(regions, id) });
   };
 
   const lineData = years.filter((y) => y >= Math.min(y1, y2) && y <= Math.max(y1, y2)).map((y) => {
@@ -86,7 +90,7 @@ function Explorer() {
           <p className="text-sm font-medium">Regiony na wykresie (max 5) — kliknij też na mapie</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {REGIONS.map((r) => (
-              <button key={r.id} onClick={() => toggle(r.id)} className={`rounded-full border px-3 py-1 text-sm ${regions.includes(r.id) ? "border-primary bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>{r.name}</button>
+              <Button key={r.id} variant={regions.includes(r.id) ? "default" : "outline"} aria-pressed={regions.includes(r.id)} onClick={() => toggle(r.id)} className="h-auto rounded-full px-3 py-1 text-sm">{r.name}</Button>
             ))}
           </div>
         </div>
@@ -100,34 +104,35 @@ function Explorer() {
         <section className="rounded-2xl border bg-card p-5 lg:col-span-3">
           <h2 className="font-display text-lg font-bold">Trend: {ind.name} [{ind.unit}]</h2>
           <div className="mt-4 h-80">
-            <ResponsiveContainer>
+            {regions.length === 0 ? <div role="status" className="flex h-full items-center justify-center text-sm text-muted-foreground">Nie wybrano regionów</div> : <ResponsiveContainer>
               <LineChart data={lineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="year" />
                 <YAxis tickFormatter={(v) => fmt(v)} width={64} domain={["auto", "auto"]} />
                 <Tooltip formatter={(v, n) => [fmt(Number(v)), name(String(n))]} />
                 <Legend formatter={(v) => name(String(v))} />
-                {regions.map((r, i) => <Line key={r} dataKey={r} stroke={COLORS[i % 5]!} strokeWidth={3} dot={{ r: 3 }} />)}
+                {regions.map((r, i) => <Line key={r} dataKey={r} stroke={COLORS[i % 5] ?? "var(--chart-1)"} strokeWidth={3} dot={{ r: 3 }} />)}
               </LineChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer>}
           </div>
         </section>
       </div>
 
       <section className="mt-6 rounded-2xl border bg-card p-5">
         <h2 className="font-display text-lg font-bold">Zmiana {y1} → {y2} we wszystkich regionach (%)</h2>
-        <div className="mt-4 h-72">
-          <ResponsiveContainer>
-            <BarChart data={table.map((t) => ({ name: t.r.name, p: t.p !== undefined ? Number(t.p.toFixed(2)) : 0 }))}>
+        <div className="mt-4 overflow-x-auto">
+          <div className="h-72 min-w-[640px]"><ResponsiveContainer>
+            <BarChart margin={{ top: 28, right: 20, bottom: 20, left: 8 }} data={table.map((t) => ({ name: t.r.name, p: t.p !== undefined ? Number(t.p.toFixed(2)) : undefined }))}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="name" interval={0} fontSize={12} />
-              <YAxis unit="%" />
+              <XAxis dataKey="name" interval={0} fontSize={11} angle={-20} textAnchor="end" height={48} />
+              <YAxis unit="%" padding={{ top: 20, bottom: 20 }} />
               <Tooltip formatter={(v) => fmtPct(Number(v))} />
               <Bar dataKey="p" name="Zmiana" radius={[6, 6, 0, 0]}>
                 {table.map((t) => <Cell key={t.r.id} fill={(t.p ?? 0) > 0 === ind.higherIsBetter ? "var(--success)" : "var(--destructive)"} />)}
+                <LabelList dataKey="p" position="top" offset={8} fill="var(--foreground)" fontSize={12} fontWeight={600} formatter={(value) => value === undefined ? "" : fmtPct(Number(value))} />
               </Bar>
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer></div>
         </div>
       </section>
 

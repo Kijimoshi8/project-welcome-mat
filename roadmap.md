@@ -1,4 +1,5 @@
 # Tasks
-- [ ] Connect official GUS BDL statistics and display provenance and missing values honestly.
-- [ ] Preserve ODS import and add explicit CSV import support.
-- [ ] Verify data mappings, import rules and application compilation.
+- [x] Preserve an empty region selection in Explorer and show its empty state.
+- [x] Display percentage values on Explorer bars.
+- [x] Make comparison dynamics readable for all categories.
+- [x] Verify selection behavior and charts in the running application.
