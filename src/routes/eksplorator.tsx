@@ -19,9 +19,9 @@ export const Route = createFileRoute("/eksplorator")({
   }),
   head: () => ({
     meta: [
-      { title: "Eksplorator danych — Płock w liczbach" },
+      { title: "Eksplorator danych — Płocka eStatystyka" },
       { name: "description", content: "Mapa, filtry i wykresy wskaźników Płocka i okolic." },
-      { property: "og:title", content: "Eksplorator danych — Płock w liczbach" },
+      { property: "og:title", content: "Eksplorator danych — Płocka eStatystyka" },
       { property: "og:description", content: "Interaktywna mapa i wykresy wskaźników regionu." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -87,7 +87,7 @@ function Explorer() {
           </select>
         </label>
         <div className="md:col-span-4">
-          <p className="text-sm font-medium">Regiony na wykresie (max 5) — kliknij też na mapie</p>
+          <p className="text-sm font-medium"><b>Regiony na wykresie (max 5) — kliknij też na mapie</b></p>
           <div className="mt-2 flex flex-wrap gap-2">
             {REGIONS.map((r) => (
               <Button key={r.id} variant={regions.includes(r.id) ? "default" : "outline"} aria-pressed={regions.includes(r.id)} onClick={() => toggle(r.id)} className="h-auto rounded-full px-3 py-1 text-sm">{r.name}</Button>

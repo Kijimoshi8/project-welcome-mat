@@ -8,9 +8,9 @@ import { downloadCsv } from "@/lib/csv";
 export const Route = createFileRoute("/porownanie")({
   head: () => ({
     meta: [
-      { title: "Porównanie regionów — Płock w liczbach" },
+      { title: "Porównanie regionów — Płocka eStatystyka" },
       { name: "description", content: "Porównaj dwa regiony: różnice liczbowe i procentowe dla wszystkich wskaźników." },
-      { property: "og:title", content: "Porównanie regionów — Płock w liczbach" },
+      { property: "og:title", content: "Porównanie regionów — Płocka eStatystyka" },
       { property: "og:description", content: "Różnice liczbowe i procentowe między regionami." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

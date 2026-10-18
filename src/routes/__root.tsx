@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Płock w liczbach" },
+      { title: "Płocka eStatystyka" },
       { name: "description", content: "Portal do analizowania i porównywania statystyk Płocka i okolic." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -125,7 +125,7 @@ function RootComponent() {
         </main>
         <ChatBot />
         <footer className="border-t py-6 text-center text-xs text-muted-foreground">
-          Płock w liczbach · prototyp hackathonowy
+          Płocka eStatystyka · prototyp hackathonowy
         </footer>
       </DataProvider>
     </QueryClientProvider>

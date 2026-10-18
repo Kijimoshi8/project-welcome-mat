@@ -6,9 +6,9 @@ import { useData } from "@/lib/store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Płock w liczbach — statystyki regionu" },
+      { title: "Płocka eStatystyka — statystyki regionu" },
       { name: "description", content: "Najważniejsze wskaźniki rozwoju Płocka i okolic w jednym miejscu." },
-      { property: "og:title", content: "Płock w liczbach" },
+      { property: "og:title", content: "Płocka eStatystyka" },
       { property: "og:description", content: "Analizuj i porównuj statystyki Płocka i okolic." },
     ],
   }),
@@ -24,7 +24,7 @@ function Home() {
     <div className="mx-auto max-w-7xl px-4 py-10">
       <section className="hero-surface rounded-3xl p-8 md:p-12">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary-foreground/70">Portal danych regionalnych</p>
-        <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold text-primary-foreground md:text-6xl">Płock w liczbach</h1>
+        <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold text-primary-foreground md:text-6xl">Płocka eStatystyka</h1>
         <p className="mt-4 max-w-2xl text-lg text-primary-foreground/80">Wybierz region, wskaźnik i dwa lata — porównaj zmiany w kilka sekund. Dla mieszkańców, uczniów, firm i analityków.</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/eksplorator" className="rounded-lg bg-accent px-5 py-3 font-semibold text-accent-foreground">Otwórz eksplorator</Link>

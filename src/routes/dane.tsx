@@ -7,9 +7,9 @@ import { downloadCsv } from "@/lib/csv";
 export const Route = createFileRoute("/dane")({
   head: () => ({
     meta: [
-      { title: "Import danych — Płock w liczbach" },
+      { title: "Import danych — Płocka eStatystyka" },
       { name: "description", content: "Wczytaj własne dane z plików ODS lub JSON." },
-      { property: "og:title", content: "Import danych — Płock w liczbach" },
+      { property: "og:title", content: "Import danych — Płocka eStatystyka" },
       { property: "og:description", content: "Import plików ODS i JSON do portalu." },
     ],
   }),

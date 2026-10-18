@@ -21,7 +21,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-3">
         <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">P</span>
-          Płock w liczbach
+          Płocka eStatystyka
         </Link>
         <nav className="flex flex-wrap gap-1">
           {NAV.map((n) => (

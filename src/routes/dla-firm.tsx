@@ -7,9 +7,9 @@ import { useState } from "react";
 export const Route = createFileRoute("/dla-firm")({
   head: () => ({
     meta: [
-      { title: "Dla firm — Płock w liczbach" },
+      { title: "Dla firm — Płocka eStatystyka" },
       { name: "description", content: "Wskaźniki inwestycyjne i potencjał gospodarczy Płocka i okolic." },
-      { property: "og:title", content: "Dla firm — Płock w liczbach" },
+      { property: "og:title", content: "Dla firm — Płocka eStatystyka" },
       { property: "og:description", content: "Gdzie zainwestować? Ranking atrakcyjności regionów." },
     ],
   }),
