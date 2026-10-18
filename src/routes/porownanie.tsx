@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, LabelList, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CATEGORIES, INDICATORS, REGIONS, fmt, fmtPct, pct } from "@/lib/data";
 import { useData } from "@/lib/store";
 import { downloadCsv } from "@/lib/csv";
@@ -64,7 +64,7 @@ function Compare() {
         </label>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-2">
         <section className="rounded-2xl border bg-card p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="font-display text-lg font-bold">Wartości: {y1} vs {y2}</h2>
@@ -100,12 +100,8 @@ function Compare() {
                 <XAxis type="number" unit="%" />
                 <YAxis type="category" dataKey="name" width={170} fontSize={11} interval={0} />
                 <Tooltip formatter={(v) => fmtPct(Number(v))} />
-                <Bar dataKey={na} fill="var(--chart-1)">
-                  <LabelList dataKey={na} position="right" offset={6} fill="var(--foreground)" fontSize={11} formatter={(value) => fmtPct(Number(value))} />
-                </Bar>
-                <Bar dataKey={nb} fill="var(--chart-2)">
-                  <LabelList dataKey={nb} position="right" offset={6} fill="var(--foreground)" fontSize={11} formatter={(value) => fmtPct(Number(value))} />
-                </Bar>
+                <Bar dataKey={na} fill="var(--chart-1)" />
+                <Bar dataKey={nb} fill="var(--chart-2)" />
               </BarChart>
             </ResponsiveContainer>
             </div>
